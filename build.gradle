@@ -1,0 +1,49 @@
+plugins {
+	id 'application'
+	id 'checkstyle'
+	id 'org.springframework.boot' version '3.0.1'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'com.adarshr.test-logger' version '3.0.0'
+}
+
+group = 'hexlet.code'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+application {
+	mainClass = 'hexlet.code.app.AppApplication'
+}
+
+compileJava {
+	options.release = 17
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+testlogger {
+	showStandardStreams = true
+}
+//задача для диплоя
+task stage(dependsOn: ['clean', 'installDist'])
+installDist.mustRunAfter clean

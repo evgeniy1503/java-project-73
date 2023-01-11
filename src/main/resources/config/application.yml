@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:5000}
+
+spring:
+  application:
+    name: taskManager
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yaml
+
+  jpa:
+    hibernate:
+      ddl-auto: none

@@ -1,0 +1,13 @@
+server:
+  error:
+    include-stacktrace: never
+
+spring:
+  datasource:
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    url: ${JDBC_DATABASE_URL}
+
+logging:
+  level:
+    ROOT: INFO

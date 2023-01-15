@@ -1,0 +1,25 @@
+users:
+  - id: 1
+    first_name: Evgeniy
+    last_name: Prohorov
+    email: evgeniy15031991@mail.ru
+    password: 123
+    created_at: 2014-06-26 04:07:31
+  - id: 2
+    first_name: Oleg
+    last_name: Petrov
+    email: op@mai.ru
+    password: 123
+    created_at: 2014-06-26 04:07:31
+  - id: 3
+    first_name: Petr
+    last_name: Smirnov
+    email: ps@mai.ru
+    password: 123
+    created_at: 2014-06-26 04:07:31
+  - id: 4
+    first_name: Karina
+    last_name: Post
+    email: kar@mail.ru
+    password: 123
+    created_at: 2014-06-26 04:07:31

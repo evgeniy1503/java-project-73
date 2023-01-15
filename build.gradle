@@ -1,6 +1,7 @@
 plugins {
 	id 'application'
 	id 'checkstyle'
+	id 'jacoco'
 	id 'org.springframework.boot' version '2.5.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'com.adarshr.test-logger' version '2.1.1'
@@ -39,6 +40,7 @@ dependencies {
 			'org.springframework.boot:spring-boot-starter-web',
 			'org.springframework.boot:spring-boot-starter-actuator',
 			'org.springframework.boot:spring-boot-starter-validation',
+			//'org.springframework.boot:spring-boot-starter-security',
 			'io.jsonwebtoken:jjwt:0.9.1',
 			'org.springdoc:springdoc-openapi-ui:1.5.12',
 			'org.liquibase:liquibase-core:4.6.1',
@@ -60,12 +62,17 @@ dependencies {
 	)
 
 	testImplementation(
-			'org.springframework.boot:spring-boot-starter-security',
-			'org.springframework.security:spring-security-test:5.5.1',
+			//'org.springframework.boot:spring-boot-starter-security',
+			//'org.springframework.security:spring-security-test:5.5.1',
 			'org.springframework.boot:spring-boot-starter-test',
-			'com.tobedevoured.modelcitizen:spring:0.8.3'
+			'com.tobedevoured.modelcitizen:spring:0.8.3',
+			'com.github.database-rider:rider-junit5:1.32.0',
+			'org.assertj:assertj-core:3.11.1'
 	)
 }
+
+task stage(dependsOn: [clean, installDist])
+installDist.mustRunAfter clean
 
 wrapper {
 	gradleVersion = '7.4'
@@ -110,6 +117,16 @@ liquibase {
 	}
 }
 
-// Таска нужная heroku для деплоя
-task stage(dependsOn: [clean, installDist])
-installDist.mustRunAfter clean
+jacocoTestReport {
+	reports {
+		xml.required = true
+	}
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+}

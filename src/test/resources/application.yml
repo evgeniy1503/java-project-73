@@ -1,0 +1,20 @@
+server:
+  port: 5000
+
+base-url: ""
+
+spring:
+  application:
+    name: taskManager
+
+    datasource:
+      url: jdbc:h2:mem:db
+      username: sa
+      password:
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yaml
+
+logging:
+  level:
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG

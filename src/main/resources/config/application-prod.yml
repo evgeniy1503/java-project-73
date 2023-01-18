@@ -3,6 +3,12 @@ server:
     include-stacktrace: never
 
 spring:
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+
   datasource:
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}

@@ -1,17 +1,16 @@
 package hexlet.code.app.service;
 
-import hexlet.code.app.dto.UserDTO;
+import hexlet.code.app.dto.UserDto;
 import hexlet.code.app.model.User;
-
-import java.security.NoSuchAlgorithmException;
 
 
 public interface UserService {
-    User createNewUser(UserDTO userDTO) throws NoSuchAlgorithmException;
-    User updateUser(UserDTO userDTO, Long id);
-    void deleteUser(Long id);
-    User getUserById(Long id);
+    User createNewUser(UserDto userDto);
 
-    Iterable<User> getAll();
+    User updateUser(long id, UserDto userDto);
+
+    String getCurrentUserName();
+
+    User getCurrentUser();
 
 }

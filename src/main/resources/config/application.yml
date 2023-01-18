@@ -8,8 +8,19 @@ spring:
     name: taskManager
 
   liquibase:
+    enabled: true
     change-log: classpath:db/changelog/changelog-master.yaml
 
   jpa:
     hibernate:
       ddl-auto: none
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  security:
+    user:
+      name: "some"
+      password: "password"

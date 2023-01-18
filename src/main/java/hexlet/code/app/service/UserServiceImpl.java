@@ -1,57 +1,71 @@
 package hexlet.code.app.service;
 
-import hexlet.code.app.dto.UserDTO;
+import hexlet.code.app.dto.UserDto;
 import hexlet.code.app.model.User;
 import hexlet.code.app.repository.UserRepository;
-import hexlet.code.app.utils.Encryptor;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
+
+import static hexlet.code.app.config.security.SecurityConfig.DEFAULT_AUTHORITIES;
 
 
 @Service
 @Transactional
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
-    @Autowired
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
-    public User createNewUser(UserDTO userDTO) throws NoSuchAlgorithmException {
-        User newUser = new User();
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail());
-        Encryptor encryptor = new Encryptor();
-        newUser.setPassword(encryptor.encryptString(userDTO.getPassword()));
-        return userRepository.save(newUser);
+    public User createNewUser(final UserDto userDto) {
+        final User user = new User();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(UserDTO userDTO, Long id) {
-        User updateUser = userRepository.findById(id).get();
-        updateUser.setFirstName(userDTO.getFirstName());
-        updateUser.setLastName(userDTO.getLastName());
-        updateUser.setEmail(userDTO.getEmail());
-        updateUser.setPassword(userDTO.getPassword());
-        return userRepository.save(updateUser);
+    public User updateUser(final long id, final UserDto userDto) {
+        final User userToUpdate = userRepository.findById(id).get();
+        userToUpdate.setEmail(userDto.getEmail());
+        userToUpdate.setFirstName(userDto.getFirstName());
+        userToUpdate.setLastName(userDto.getLastName());
+        userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepository.save(userToUpdate);
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public String getCurrentUserName() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).get();
+    public User getCurrentUser() {
+        return userRepository.findByEmail(getCurrentUserName()).get();
     }
 
     @Override
-    public Iterable<User> getAll() {
-        return userRepository.findAll();
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .map(this::buildSpringUser)
+                .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + username));
+    }
+
+    private UserDetails buildSpringUser(final User user) {
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                DEFAULT_AUTHORITIES
+        );
     }
 }

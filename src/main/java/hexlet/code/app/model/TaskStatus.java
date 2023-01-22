@@ -1,6 +1,5 @@
 package hexlet.code.app.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,40 +13,39 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotBlank;
+
 import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Entity
-@Table(name = "users")
+@Table(name = "statuses")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class TaskStatus {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(unique = true)
-    private String email;
-
-    @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
-
-    @NotBlank
-    @JsonIgnore
-    private String password;
+    private String name;
 
     @CreationTimestamp
     @Temporal(TIMESTAMP)
     private Date createdAt;
 
-    public User(final Long id) {
-        this.id = id;
+    public TaskStatus(final Long idValue) {
+        this.id = idValue;
     }
+
+    public TaskStatus(final Long idValue, String nameValue) {
+        this.id = idValue;
+        this.name = nameValue;
+    }
+
+
 }

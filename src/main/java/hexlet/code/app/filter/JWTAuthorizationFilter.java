@@ -43,10 +43,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         final var authToken = Optional.ofNullable(request.getHeader(AUTHORIZATION))
                 .map(header -> header.replaceFirst("^" + BEARER, ""))
                 .map(String::trim)
-                .map(jwtHelper::verify)
+                .map(token -> jwtHelper.verify(token))
                 .map(claims -> claims.get(SPRING_SECURITY_FORM_USERNAME_KEY))
-                .map(Object::toString)
-                .map(this::buildAuthToken)
+                .map(username -> username.toString())
+                .map(username -> buildAuthToken(username))
                 .orElseThrow();
 
 

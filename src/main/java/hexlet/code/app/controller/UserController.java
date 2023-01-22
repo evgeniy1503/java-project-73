@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static hexlet.code.app.controller.UserController.USER_CONTROLLER_PATH;
+import static org.springframework.http.HttpStatus.CREATED;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
@@ -36,16 +41,17 @@ public class UserController {
 
 
     @GetMapping
-    public Iterable<User> getAll() {
-        return userRepository.findAll();
+    public List<User> getAll() {
+        return userRepository.findAll().stream().toList();
     }
 
     @GetMapping(ID)
-    public User getUserById(@PathVariable final Long id) {
+    public User getUserById(@PathVariable final long id) {
         return userRepository.findById(id).get();
     }
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public User registerNew(@RequestBody @Valid final UserDto dto) {
         return userService.createNewUser(dto);
     }

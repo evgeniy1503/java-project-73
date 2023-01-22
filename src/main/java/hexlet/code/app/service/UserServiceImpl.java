@@ -45,20 +45,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String getCurrentUserName() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public Long getCurrentUserId() {
+        return Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     @Override
     public User getCurrentUser() {
-        return userRepository.findByEmail(getCurrentUserName()).get();
+        return userRepository.findById(getCurrentUserId()).get();
     }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .map(this::buildSpringUser)
-                .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'email': " + username));
     }
 
     private UserDetails buildSpringUser(final User user) {

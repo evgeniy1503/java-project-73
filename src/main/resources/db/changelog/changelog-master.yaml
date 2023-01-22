@@ -1,0 +1,69 @@
+databaseChangeLog:
+- changeSet:
+    id: 1674312945648-1
+    author: evgeniy (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: statusesPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: statuses
+- changeSet:
+    id: 1674312945648-2
+    author: evgeniy (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: usersPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            name: last_name
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        tableName: users
+- changeSet:
+    id: 1674312945648-3
+    author: evgeniy (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_STATUSESNAME_COL
+        tableName: statuses
+- changeSet:
+    id: 1674312945648-4
+    author: evgeniy (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: UC_USERSEMAIL_COL
+        tableName: users
+

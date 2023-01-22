@@ -13,14 +13,18 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserDto {
 
-    @NotBlank(message = "First Name not be Empty")
-    private String firstName;
-    @NotBlank(message = "Last Name not be Empty")
-    private String lastName;
-    @Email(message = "Email should be valid")
+    @NotBlank
+    @Email
     private String email;
-    @NotBlank(message = "Password not be Empty")
-    @Size(min = 3, message = "Password should be valid")
+
+    @NotBlank
+    private String firstName;
+
+    @NotBlank
+    private String lastName;
+
+    @NotBlank
+    @Size(min = 3, max = 100)
     private String password;
 
 }

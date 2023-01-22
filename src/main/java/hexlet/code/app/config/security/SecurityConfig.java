@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import static hexlet.code.app.controller.TaskStatusController.TASK_STATUS_CONTROLLER_PATH;
 import static hexlet.code.app.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -49,12 +50,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public SecurityConfig(@Value("${base-url}") final String baseUrl,
                           final UserDetailsService userDetailsService,
-                          final PasswordEncoder passwordEncoder, final JWTHelper jwtHelper) {
+                          final PasswordEncoder passwordEncoder,
+                          final JWTHelper jwtHelper) {
         this.loginRequest = new AntPathRequestMatcher(baseUrl + LOGIN, POST.toString());
         this.publicUrls = new OrRequestMatcher(
                 loginRequest,
                 new AntPathRequestMatcher(baseUrl + USER_CONTROLLER_PATH, POST.toString()),
                 new AntPathRequestMatcher(baseUrl + USER_CONTROLLER_PATH, GET.toString()),
+                new AntPathRequestMatcher(baseUrl + TASK_STATUS_CONTROLLER_PATH, GET.toString()),
                 new NegatedRequestMatcher(new AntPathRequestMatcher(baseUrl + "/**"))
         );
         this.userDetailsService = userDetailsService;
@@ -93,5 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .logout().disable();
+
+        http.headers().frameOptions().disable();
     }
 }

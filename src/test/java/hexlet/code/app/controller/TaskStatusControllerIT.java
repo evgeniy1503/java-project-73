@@ -5,7 +5,6 @@ import hexlet.code.app.config.SpringConfigForIT;
 import hexlet.code.app.dto.TaskStatusDto;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskStatusRepository;
-import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.utils.TestUtils;
 
 import org.junit.jupiter.api.AfterEach;
@@ -45,9 +44,6 @@ public class TaskStatusControllerIT {
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @BeforeEach
     public void before() throws Exception {
         testUtils.regDefaultUser();
@@ -60,10 +56,11 @@ public class TaskStatusControllerIT {
 
     @Test
     public void createNewStatus() throws Exception {
-        final TaskStatusDto statusDtoSave = new TaskStatusDto("Done");
+
+        final TaskStatusDto status = new TaskStatusDto("Done");
 
         final var request = post(TASK_STATUS_CONTROLLER_PATH)
-                .content(asJson(statusDtoSave))
+                .content(asJson(status))
                 .contentType(MediaType.APPLICATION_JSON);
 
         final var response = testUtils.perform(request, TEST_USERNAME)
@@ -74,6 +71,7 @@ public class TaskStatusControllerIT {
         final TaskStatus savedTaskStatus = fromJson(response.getContentAsString(), new TypeReference<>() {
         });
 
+        assertThat(savedTaskStatus.getName()).isEqualTo(status.getName());
         assertThat(taskStatusRepository.getById(savedTaskStatus.getId())).isNotNull();
     }
 
@@ -113,7 +111,6 @@ public class TaskStatusControllerIT {
     @Test
     public void getStatusById() throws Exception {
 
-
         final TaskStatusDto status = new TaskStatusDto("Done");
 
         final var requestPost = post(TASK_STATUS_CONTROLLER_PATH)
@@ -124,8 +121,6 @@ public class TaskStatusControllerIT {
                 .andExpect(status().isCreated());
 
         final TaskStatus taskStatus = taskStatusRepository.findAll().get(0);
-
-        System.out.println("-------------> " + taskStatus.getName());
 
         final var response = testUtils.perform(
                         get(TASK_STATUS_CONTROLLER_PATH + ID, taskStatus.getId()),
@@ -142,10 +137,11 @@ public class TaskStatusControllerIT {
 
     @Test
     public void updateStatus() throws Exception {
-        final TaskStatusDto status = new TaskStatusDto("Done");
+
+        final TaskStatusDto statusDto = new TaskStatusDto("Done");
 
         final var requestPost = post(TASK_STATUS_CONTROLLER_PATH)
-                .content(asJson(status))
+                .content(asJson(statusDto))
                 .contentType(MediaType.APPLICATION_JSON);
 
         final var response = testUtils.perform(requestPost, TEST_USERNAME)
@@ -153,13 +149,13 @@ public class TaskStatusControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final long id = fromJson(response.getContentAsString(), new TypeReference<TaskStatus>() {
+        final Long id = fromJson(response.getContentAsString(), new TypeReference<TaskStatus>() {
         }).getId();
 
-        status.setName("In process");
+        statusDto.setName("In process");
 
         final var requestToUpdate = put(TASK_STATUS_CONTROLLER_PATH + ID, id)
-                .content(asJson(status))
+                .content(asJson(statusDto))
                 .contentType(MediaType.APPLICATION_JSON);
 
         testUtils.perform(requestToUpdate, TEST_USERNAME)
@@ -167,7 +163,7 @@ public class TaskStatusControllerIT {
 
         final TaskStatus updateStatus = taskStatusRepository.findById(id).get();
 
-        assertThat(status.getName()).isEqualTo(updateStatus.getName());
+        assertThat(statusDto.getName()).isEqualTo(updateStatus.getName());
     }
 
     @Test

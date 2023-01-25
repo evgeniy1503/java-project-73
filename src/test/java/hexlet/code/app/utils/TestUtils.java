@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestUtils {
 
     public static final String TEST_USERNAME = "mail@mail.ru";
+
     public static final String TEST_USERNAME_2 = "mail2@mail.ru";
 
     public static final String USER_CONTROLLER_PATH = "/users";
@@ -40,7 +41,10 @@ public class TestUtils {
 
     public static final String TASK_CONTROLLER_PATH = "/tasks";
 
+    public static final String LABEL_CONTROLLER_PATH = "/labels";
+
     public static final String LOGIN = "/login";
+
     public static final String ID = "/{id}";
 
 

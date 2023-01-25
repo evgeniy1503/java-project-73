@@ -1,8 +1,9 @@
-package hexlet.code.app.service;
+package hexlet.code.app.service.impl;
 
 import hexlet.code.app.dto.UserDto;
 import hexlet.code.app.model.User;
 import hexlet.code.app.repository.UserRepository;
+import hexlet.code.app.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,13 +46,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Long getCurrentUserId() {
-        return Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+    public String getCurrentUserId() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override
     public User getCurrentUser() {
-        return userRepository.findById(getCurrentUserId()).get();
+        return userRepository.findByEmail(getCurrentUserId()).get();
     }
 
     @Override

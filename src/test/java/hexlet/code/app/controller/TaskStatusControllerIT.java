@@ -1,11 +1,11 @@
 package hexlet.code.app.controller;
 
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import hexlet.code.app.config.SpringConfigForIT;
 import hexlet.code.app.dto.TaskStatusDto;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskStatusRepository;
+import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.utils.TestUtils;
 
 import org.junit.jupiter.api.AfterEach;
@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static hexlet.code.app.config.SpringConfigForIT.TEST_PROFILE;
-import static hexlet.code.app.utils.TestUtils.ID;
+import static hexlet.code.app.controller.UserController.ID;
 import static hexlet.code.app.utils.TestUtils.TASK_STATUS_CONTROLLER_PATH;
 import static hexlet.code.app.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.app.utils.TestUtils.asJson;
@@ -28,6 +28,7 @@ import static hexlet.code.app.utils.TestUtils.fromJson;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +44,9 @@ public class TaskStatusControllerIT {
 
     @Autowired
     private TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     public void before() throws Exception {
@@ -74,6 +78,69 @@ public class TaskStatusControllerIT {
     }
 
     @Test
+    public void gelAllStatuses() throws Exception {
+
+        final TaskStatusDto status1 = new TaskStatusDto("Done");
+        final TaskStatusDto status2 = new TaskStatusDto("In process");
+
+        final var requestPost1 = post(TASK_STATUS_CONTROLLER_PATH)
+                .content(asJson(status1))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        testUtils.perform(requestPost1, TEST_USERNAME)
+                .andExpect(status().isCreated());
+
+        final var requestPost2 = post(TASK_STATUS_CONTROLLER_PATH)
+                .content(asJson(status2))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        testUtils.perform(requestPost2, TEST_USERNAME)
+                .andExpect(status().isCreated());
+
+        assertThat(taskStatusRepository.findAll().size()).isEqualTo(2);
+
+        final var response = testUtils.perform(
+                        get(TASK_STATUS_CONTROLLER_PATH),
+                TEST_USERNAME)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getContentAsString()).contains("Done");
+        assertThat(response.getContentAsString()).contains("In process");
+    }
+
+    @Test
+    public void getStatusById() throws Exception {
+
+
+        final TaskStatusDto status = new TaskStatusDto("Done");
+
+        final var requestPost = post(TASK_STATUS_CONTROLLER_PATH)
+                .content(asJson(status))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        testUtils.perform(requestPost, TEST_USERNAME)
+                .andExpect(status().isCreated());
+
+        final TaskStatus taskStatus = taskStatusRepository.findAll().get(0);
+
+        System.out.println("-------------> " + taskStatus.getName());
+
+        final var response = testUtils.perform(
+                        get(TASK_STATUS_CONTROLLER_PATH + ID, taskStatus.getId()),
+                        TEST_USERNAME)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        final TaskStatus actualTaskStatuses = fromJson(response.getContentAsString(), new TypeReference<TaskStatus>() {
+        });
+
+        assertThat(taskStatus.getName()).isEqualTo(actualTaskStatuses.getName());
+    }
+
+    @Test
     public void updateStatus() throws Exception {
         final TaskStatusDto status = new TaskStatusDto("Done");
 
@@ -88,6 +155,7 @@ public class TaskStatusControllerIT {
 
         final long id = fromJson(response.getContentAsString(), new TypeReference<TaskStatus>() {
         }).getId();
+
         status.setName("In process");
 
         final var requestToUpdate = put(TASK_STATUS_CONTROLLER_PATH + ID, id)

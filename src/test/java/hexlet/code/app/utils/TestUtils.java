@@ -8,6 +8,8 @@ import hexlet.code.app.dto.TaskStatusDto;
 import hexlet.code.app.dto.UserDto;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.model.User;
+import hexlet.code.app.repository.LabelRepository;
+import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -33,10 +35,14 @@ public class TestUtils {
     public static final String TEST_USERNAME_2 = "mail2@mail.ru";
 
     public static final String USER_CONTROLLER_PATH = "/users";
+
+    public static final String TASK_STATUS_CONTROLLER_PATH = "/statuses";
+
+    public static final String TASK_CONTROLLER_PATH = "/tasks";
+
     public static final String LOGIN = "/login";
     public static final String ID = "/{id}";
 
-    public static final String TASK_STATUS_CONTROLLER_PATH = "/statuses";
 
     private static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules();
 
@@ -62,11 +68,19 @@ public class TestUtils {
     private TaskStatusRepository taskStatusRepository;
 
     @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private LabelRepository labelRepository;
+
+    @Autowired
     private JWTHelper jwtHelper;
 
     public void tearDown() {
+        taskRepository.deleteAll();
         userRepository.deleteAll();
         taskStatusRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     public User getUserByEmail(final String email) {
@@ -124,4 +138,5 @@ public class TestUtils {
 
         return status;
     }
+
 }

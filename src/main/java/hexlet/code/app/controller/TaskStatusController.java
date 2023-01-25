@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 import static hexlet.code.app.controller.TaskStatusController.TASK_STATUS_CONTROLLER_PATH;
@@ -41,7 +40,7 @@ public class TaskStatusController {
 
     @GetMapping(ID)
     public TaskStatus getById(@PathVariable Long id) {
-        return taskStatusRepository.getById(id);
+        return taskStatusRepository.findById(id).get();
     }
 
     @PostMapping()
@@ -56,7 +55,7 @@ public class TaskStatusController {
     }
 
     @DeleteMapping(ID)
-    public void deletedTaskStatus(@PathVariable Long id) {
+    public void deleteTaskStatus(@PathVariable Long id) {
         taskStatusRepository.deleteById(id);
     }
 }

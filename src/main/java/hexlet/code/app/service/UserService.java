@@ -9,7 +9,7 @@ public interface UserService {
 
     User updateUser(long id, UserDto userDto);
 
-    Long getCurrentUserId();
+    String getCurrentUserId();
 
     User getCurrentUser();
 

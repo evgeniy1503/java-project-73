@@ -46,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles(TEST_PROFILE)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
-
 public class UserControllerIT {
 
     @Autowired
@@ -83,7 +82,8 @@ public class UserControllerIT {
 
          final User user = fromJson(response.getContentAsString(), new TypeReference<>() {
          });
-         System.out.println(user.getEmail());
+
+         assertEquals(expectedUser.getId(), user.getId());
     }
 
     @Disabled("For now active only positive tests")

@@ -133,14 +133,14 @@ public class TaskControllerIT {
                 .content(asJson(task1))
                 .contentType(MediaType.APPLICATION_JSON);
 
-        final var responseTask1 = testUtils.perform(requestTask1, TEST_USERNAME)
+        testUtils.perform(requestTask1, TEST_USERNAME)
                 .andExpect(status().isCreated());
 
         final var requestTask2 = post(TASK_CONTROLLER_PATH)
                 .content(asJson(task2))
                 .contentType(MediaType.APPLICATION_JSON);
 
-        final var responseTask2 = testUtils.perform(requestTask2, TEST_USERNAME)
+        testUtils.perform(requestTask2, TEST_USERNAME)
                 .andExpect(status().isCreated());
 
         final var response = testUtils.perform(get(TASK_CONTROLLER_PATH), TEST_USERNAME)
@@ -254,6 +254,69 @@ public class TaskControllerIT {
 
     }
 
+    @Test
+    public void testFilter() throws Exception {
+
+        final TaskStatus taskStatus1 = addTaskStatus("Created");
+
+        final TaskDto task1 = buildTaskDto(
+                "Task_1",
+                "test_description_1",
+                user,
+                taskStatus,
+                label
+        );
+
+        final TaskDto task2 = buildTaskDto(
+                "Task_2",
+                "test_description_2",
+                user,
+                taskStatus1,
+                label
+        );
+
+        final var requestTask1 = post(TASK_CONTROLLER_PATH)
+                .content(asJson(task1))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        final var response1 = testUtils.perform(requestTask1, TEST_USERNAME)
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse();
+
+        final Task taskForFilter = fromJson(response1.getContentAsString(), new TypeReference<Task>() {
+        });
+
+        final Long idStatus = taskForFilter.getTaskStatus().getId();
+        final Long authorId = taskForFilter.getAuthor().getId();
+
+        final var requestTask2 = post(TASK_CONTROLLER_PATH)
+                .content(asJson(task2))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        testUtils.perform(requestTask2, TEST_USERNAME)
+                .andExpect(status().isCreated());
+
+        final var response = testUtils.perform(
+                get(TASK_CONTROLLER_PATH
+                        + "?taskStatus=" + idStatus + "&authorId=" + authorId),
+                        TEST_USERNAME)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+
+
+
+        assertThat(response.getContentAsString()).contains(label.getName());
+        assertThat(response.getContentAsString()).contains(task1.getName());
+        assertThat(response.getContentAsString()).contains(taskStatus.getName());
+        assertThat(response.getContentAsString()).doesNotContain(task2.getName());
+
+
+
+    }
+
     private TaskDto buildTaskDto(String name, String description, User user, TaskStatus taskStatus, Label label) {
         return  new TaskDto(
                 name,
@@ -266,13 +329,13 @@ public class TaskControllerIT {
 
     private TaskStatus addTaskStatus(String name) {
         final TaskStatus taskStatus = new TaskStatus();
-        taskStatus.setName("New");
+        taskStatus.setName(name);
         return taskStatusRepository.save(taskStatus);
     }
 
     private Label addLabel(String name) {
         final Label label = new Label();
-        label.setName("New");
+        label.setName(name);
         return labelRepository.save(label);
     }
 }

@@ -51,7 +51,7 @@ public class TaskController {
         return taskService.createNewTask(taskDto);
     }
 
-    @Operation(summary = "Get Tasks by Predicate")
+    @Operation(summary = "Get tasks by predicate or get all tasks")
     @ApiResponses(@ApiResponse(responseCode = "200", content =
     @Content(array = @ArraySchema(schema = @Schema(implementation = Task.class)))
     ))
@@ -60,14 +60,14 @@ public class TaskController {
         return taskRepository.findAll(predicate);
     }
 
-    @Operation(summary = "Get task by Id")
+    @Operation(summary = "Get task by id")
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @GetMapping(ID)
     public Task getTaskById(@PathVariable Long id) {
         return taskRepository.findById(id).get();
     }
 
-    @Operation(summary = "Update Task")
+    @Operation(summary = "Update task by id")
     @ApiResponse(responseCode = "200", description = "Task updated")
     @PutMapping(ID)
     public Task updateTask(@RequestBody @Valid TaskDto taskDto,
@@ -75,7 +75,7 @@ public class TaskController {
         return taskService.updateTask(taskDto, id);
     }
 
-    @Operation(summary = "Delete Task")
+    @Operation(summary = "Delete task")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task deleted"),
             @ApiResponse(responseCode = "404", description = "Task with that id not found")})

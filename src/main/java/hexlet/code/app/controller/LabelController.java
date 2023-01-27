@@ -37,7 +37,7 @@ public class LabelController {
     private final LabelRepository labelRepository;
     private final LabelService labelService;
 
-    @Operation(summary = "Create new Label")
+    @Operation(summary = "Create new label")
     @ApiResponse(responseCode = "201", description = "Label created")
     @PostMapping
     @ResponseStatus(CREATED)
@@ -54,14 +54,14 @@ public class LabelController {
         return labelRepository.findAll().stream().toList();
     }
 
-    @Operation(summary = "Get label")
+    @Operation(summary = "Get label by id")
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @GetMapping(ID)
     public Label getLabelById(@PathVariable Long id) {
         return labelRepository.findById(id).get();
     }
 
-    @Operation(summary = "Update label")
+    @Operation(summary = "Update label by id")
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @PutMapping(ID)
     public Label updateLabel(@RequestBody @Valid LabelDto labelDto,

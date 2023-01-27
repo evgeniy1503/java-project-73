@@ -53,7 +53,7 @@ public class UserController {
         return userRepository.findAll().stream().toList();
     }
 
-    @Operation(summary = "Get a user by id")
+    @Operation(summary = "Get user by id")
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @GetMapping(ID)
     public User getUserById(@PathVariable final long id) {

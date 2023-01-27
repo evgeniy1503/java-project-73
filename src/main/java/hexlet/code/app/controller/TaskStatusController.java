@@ -38,7 +38,7 @@ public class TaskStatusController {
     @Autowired
     private TaskStatusService taskStatusService;
 
-    @Operation(summary = "Get list of Task Statuses")
+    @Operation(summary = "Get all task statuses")
     @ApiResponses(@ApiResponse(responseCode = "200", content =
     @Content(schema = @Schema(implementation = TaskStatus.class))
     ))
@@ -47,14 +47,14 @@ public class TaskStatusController {
         return taskStatusRepository.findAll().stream().toList();
     }
 
-    @Operation(summary = "Get Status by Id")
+    @Operation(summary = "Get task status by id")
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @GetMapping(ID)
     public TaskStatus getById(@PathVariable Long id) {
         return taskStatusRepository.findById(id).get();
     }
 
-    @Operation(summary = "Create new Task Status")
+    @Operation(summary = "Create new task status")
     @ApiResponse(responseCode = "201", description = "Status created")
     @PostMapping()
     @ResponseStatus(CREATED)
@@ -62,7 +62,7 @@ public class TaskStatusController {
         return taskStatusService.createNewTaskStatus(taskStatusDto);
     }
 
-    @Operation(summary = "Update a Task Status")
+    @Operation(summary = "Update a task status by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task Status updated"),
             @ApiResponse(responseCode = "404", description = "Task Status with that id not found")
@@ -72,7 +72,7 @@ public class TaskStatusController {
         return taskStatusService.updateTaskStatus(id, taskStatusDto);
     }
 
-    @Operation(summary = "Delete a Task Status")
+    @Operation(summary = "Delete a task status")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task Status deleted"),
             @ApiResponse(responseCode = "404", description = "Task Status with that id not found")

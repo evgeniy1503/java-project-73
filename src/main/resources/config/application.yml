@@ -24,3 +24,5 @@ spring:
     user:
       name: "some"
       password: "password"
+
+  rollbar_token: ${rollbar_tok}

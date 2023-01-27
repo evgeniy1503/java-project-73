@@ -8,6 +8,10 @@ spring:
     username: sa
     password:
 
+springdoc:
+  swagger-ui:
+    path: /swagger.html
+
   jpa:
     show-sql: true
 

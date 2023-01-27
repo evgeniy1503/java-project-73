@@ -25,4 +25,4 @@ spring:
       name: "some"
       password: "password"
 
-  rollbar_token: ${rollbar_tok}
+  rollbar_token: 21359dae98f14f8792c40d613e7cd463

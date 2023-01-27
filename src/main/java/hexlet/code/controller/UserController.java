@@ -33,11 +33,14 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
 public class UserController {
+
     public static final String USER_CONTROLLER_PATH = "/users";
     public static final String ID = "/{id}";
     private static final String ONLY_OWNER_BY_ID = """
             @userRepository.findById(#id).get().getEmail() == authentication.getName()
         """;
+
+
 
     @Autowired
     private UserService userService;
@@ -57,6 +60,7 @@ public class UserController {
     @ApiResponses(@ApiResponse(responseCode = "200"))
     @GetMapping(ID)
     public User getUserById(@PathVariable final long id) {
+
         return userRepository.findById(id).get();
     }
 

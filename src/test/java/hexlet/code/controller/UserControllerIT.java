@@ -113,6 +113,8 @@ public class UserControllerIT {
     @Test
     public void login() throws Exception {
         final LoginDto loginDto = new LoginDto(
+                testUtils.getTestRegistrationDto().getFirstName(),
+                testUtils.getTestRegistrationDto().getLastName(),
                 testUtils.getTestRegistrationDto().getEmail(),
                 testUtils.getTestRegistrationDto().getPassword()
         );

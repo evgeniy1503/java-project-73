@@ -7,10 +7,47 @@
 <h2>Описание</h2>
 <p><a href="https://taskmanager-sb8q.onrender.com/"><u><b>Task Manager</b></u></a> – система управления задачами. Она позволяет ставить задачи, назначать исполнителей и менять их статусы. Для работы с системой требуется регистрация и аутентификация.</p>
 
-<h5><a href="https://taskmanager-sb8q.onrender.com/signup">Регистрация и Авторизация пользователя</h5>
+<h5><a href="https://taskmanager-sb8q.onrender.com/signup">Регистрация и Авторизация пользователя</a></h5>
 
-<h5><a href="https://taskmanager-sb8q.onrender.com/labels">Список меток, статусов для задач</h5>
+<h5><a href="https://taskmanager-sb8q.onrender.com/labels">Список меток, статусов для задач</a></h5>
 
-<h5><a href="https://taskmanager-sb8q.onrender.com/tasks">Список задач с возможностью фильтрации</h5>
+<h5><a href="https://taskmanager-sb8q.onrender.com/tasks">Список задач с возможностью фильтрации</a></h5>
 
-<h5><a href="https://taskmanager-sb8q.onrender.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config">Задокументированные методы API (контроллеров для пользователей, задач и меток)</h5>
+<h5><a href="https://taskmanager-sb8q.onrender.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config">Задокументированные методы API (контроллеров для пользователей, задач и меток)</a></h5>
+
+### Technologies
+
+1. Java 17
+2. Spring Boot, WVC, Data
+3. Swagger, Lombok
+4. Gradle
+5. Liquibase
+6. Spring Security, JWT
+
+### Development
+
+Прежде чем Вы сможете собрать этот проект, Вы должны установить и настроить следующие зависимости на своем компьютере:
+
+1. JDK 17
+2. Gradle 7.4
+3. Node.js 16.13.1
+
+### Build a project
+
+```bash
+make build
+```
+
+## Testing
+
+Для запуска теста приложения, запустите:
+
+```bash
+make test
+```
+
+## Run application with database local
+
+```bash
+make start
+```

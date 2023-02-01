@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 
 import static hexlet.code.controller.TaskStatusController.TASK_STATUS_CONTROLLER_PATH;
@@ -33,9 +34,9 @@ public class TaskStatusController {
 
     public static final String TASK_STATUS_CONTROLLER_PATH = "/statuses";
     public static final String ID = "/{id}";
-    @Autowired
+
     private TaskStatusRepository taskStatusRepository;
-    @Autowired
+
     private TaskStatusService taskStatusService;
 
     @Operation(summary = "Get all task statuses")
@@ -58,7 +59,7 @@ public class TaskStatusController {
     @ApiResponse(responseCode = "201", description = "Status created")
     @PostMapping()
     @ResponseStatus(CREATED)
-    public TaskStatus createTaskStatus(@RequestBody TaskStatusDto taskStatusDto) {
+    public TaskStatus createTaskStatus(@RequestBody @Valid TaskStatusDto taskStatusDto) {
         return taskStatusService.createNewTaskStatus(taskStatusDto);
     }
 
@@ -68,7 +69,7 @@ public class TaskStatusController {
             @ApiResponse(responseCode = "404", description = "Task Status with that id not found")
     })
     @PutMapping(ID)
-    public TaskStatus updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatusDto taskStatusDto) {
+    public TaskStatus updateTaskStatus(@PathVariable Long id, @RequestBody @Valid TaskStatusDto taskStatusDto) {
         return taskStatusService.updateTaskStatus(id, taskStatusDto);
     }
 

@@ -35,9 +35,9 @@ public class TaskStatusController {
     public static final String TASK_STATUS_CONTROLLER_PATH = "/statuses";
     public static final String ID = "/{id}";
 
-    private TaskStatusRepository taskStatusRepository;
+    private final TaskStatusRepository taskStatusRepository;
 
-    private TaskStatusService taskStatusService;
+    private final TaskStatusService taskStatusService;
 
     @Operation(summary = "Get all task statuses")
     @ApiResponses(@ApiResponse(responseCode = "200", content =

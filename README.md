@@ -15,7 +15,7 @@
 
 <h5><a href="https://taskmanager-sb8q.onrender.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config">Задокументированные методы API (контроллеров для пользователей, задач и меток)</a></h5>
 
-### Technologies
+### Технологии
 
 1. Java 17
 2. Spring Boot, WVC, Data
@@ -24,7 +24,7 @@
 5. Liquibase
 6. Spring Security, JWT
 
-### Development
+### Разработка
 
 Прежде чем Вы сможете собрать этот проект, Вы должны установить и настроить следующие зависимости на своем компьютере:
 
@@ -32,13 +32,13 @@
 2. Gradle 7.4
 3. Node.js 16.13.1
 
-### Build a project
+### Сборка проекта
 
 ```bash
 make build
 ```
 
-## Testing
+## Тестирование проекта
 
 Для запуска теста приложения, запустите:
 
@@ -46,7 +46,7 @@ make build
 make test
 ```
 
-## Run application with database local
+## Запустите приложение с локальной базой данных
 
 ```bash
 make start

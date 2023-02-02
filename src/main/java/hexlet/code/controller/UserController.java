@@ -40,9 +40,9 @@ public class UserController {
         """;
 
 
-    private UserService userService;
+    private final UserService userService;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Operation(summary = "Get all users")
     // Content используется для укзания содержимого ответа
